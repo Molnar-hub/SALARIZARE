@@ -8,7 +8,7 @@ function App() {
 <a href="STAT PLATA.html">STAT PLATA</a><br></br>
 <a href="INTRODUCERE DATE.html">INTRODUCERE DATE</a><br></br>
 <a href="RAPOARTE SALARII.html">RAPOARTE SALARII</a><br></br>
-<a href="ISTORIC.html">ISTORIC</a><br></br>
+<a href=".html">ISTORIC</a><br></br>
       </ul>
     </div>
   );
