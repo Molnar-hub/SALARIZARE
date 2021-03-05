@@ -9,6 +9,4 @@ const Istoric = () => {
     )
 }
 
-
-
 export default Istoric;

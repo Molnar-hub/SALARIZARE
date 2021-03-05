@@ -1,18 +1,17 @@
 import React from 'react';
 
 
-const Pontaj = () => {
+function Concediu() {
 
     return (
         <>
-            <h2>Pontaj</h2>
-        
+
+            <h2>Concediu medical</h2>
             
         </>
     )
 }
 
 
-      
 
-export default Pontaj;
+export default Concediu;
