@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import TextError from '../TextError';
 
-const DatePicker = ({label, name, ...rest}) => {
+const DatePicker = ({label, name}) => {
 
     return (
         <div className='form-control'>
@@ -19,7 +19,6 @@ const DatePicker = ({label, name, ...rest}) => {
                     return <ReactDatePicker 
                                 id={name} 
                                 {...field} 
-                                {...rest}
                                 dateFormat="yyyy/MM/dd"
                                 selected={value} 
                                 onChange={date => setFieldValue(name, date)}

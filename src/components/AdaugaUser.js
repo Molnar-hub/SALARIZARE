@@ -1,19 +1,17 @@
 import React from 'react';
 
-import {Formik, Form, Field, ErrorMessage} from 'formik';
+import {Formik, Form} from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import {uniqueId} from 'lodash';
 
 import Api from './utils/api';
 
-import TextError from './TextError';
-import DatePicker from './datePicker/datePicker';
+import FormikControl from './datePicker/FormikControl';
 import {VALIDATION} from './utils/utils';
 import {REFRESH_KEY} from './utils/constants';
 
 import './AdaugaUser.css';
-import 'react-datepicker/dist/react-datepicker.css';
 
 const initialValues = {
     nume: '',
@@ -43,10 +41,12 @@ const validationSchema = Yup.object({
 
 const AddUser = ({setRefreshKey}) => {
 
-    const onSubmit = async (values) => {
+    const onSubmit = async (values, onSubmitProps) => {
         values.salarbaza=parseFloat(values.salarbaza);
+    
         await Api.post('/angajati', values);
         setRefreshKey(uniqueId(REFRESH_KEY));
+        onSubmitProps.resetForm();
     }; 
 
     return (
@@ -57,52 +57,23 @@ const AddUser = ({setRefreshKey}) => {
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
-            > 
+            >
                 <Form id='form-salariati'>
-                    <div className='form-control'>
-                        <label htmlFor='nume'>Nume</label>
-                        <Field type='text' id='nume' name='nume' />
-                        <ErrorMessage name='nume' component={TextError} />
-                    </div>
-        
-                    <div className='form-control'>
-                        <label htmlFor='prenume'>Prenume</label>
-                        <Field type='text' id='prenume' name='prenume' />
-                        <ErrorMessage name='prenume' component={TextError} />
-                    </div>
-                    <div className='form-control'>
-                        <label htmlFor='cnp'>Cnp</label>
-                        <Field type='text' id='cnp' name='cnp' />
-                        <ErrorMessage name='cnp' component={TextError} />
-                    </div>
-                    <div className='form-control'>
-                        <label htmlFor='telefon'>Telefon</label>
-                        <Field type='text' id='telefon' name='telefon' />
-                        <ErrorMessage name='telefon' component={TextError} />
-                    </div>
-                    <div className='form-control'>
-                        <label htmlFor='functia'>Functia</label>
-                        <Field type='text' id='functia' name='functia' />
-                        <ErrorMessage name='functia' component={TextError} />
-                    </div>
-                    <DatePicker label='Data angajare' name='dataangajare' />
-                    <div className='form-control'>
-                        <label htmlFor='deducerepersonala'>Deducere personala</label>
-                        <Field type='text' id='deducerepersonala' name='deducerepersonala' />
-                        <ErrorMessage name='deducerepersonala' component={TextError} />
-                    </div>
-                    <div className='form-control'>
-                        <label htmlFor='salarbaza'>Salar baza</label>
-                        <Field type='text' id='salarbaza' name='salarbaza' />
-                        <ErrorMessage name='salarbaza' component={TextError} />
-                    </div>
+                    <FormikControl control='input' label='Nume' name='nume' />
+                    <FormikControl control='input' label='Prenume' name='prenume' />
+                    <FormikControl control='input' label='CNP' name='cnp' />
+                    <FormikControl control='input' label='Telefon' name='telefon' />
+                    <FormikControl control='input' label='Functia' name='functia' />
+                    <FormikControl control='date' label='Data angajare' name='dataangajare' />
+                    <FormikControl control='input' label='Deducere personala' name='deducerepersonala' />
+                    <FormikControl control='input' label='Salar baza' name='salarbaza' />
                     <Button 
                         variant='primary' 
                         type='submit'
                         id='submitButton'
                         >
                             Adauga angajat
-                        </Button>
+                    </Button>
                 </Form>
             </Formik>
         </>
