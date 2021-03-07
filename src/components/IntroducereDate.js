@@ -1,16 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import {uniqueId} from 'lodash';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Button from 'react-bootstrap/Button';
+import {REFRESH_KEY} from './utils/constants';
 
 import AddUser from './AdaugaUser';
 import AfisareUseri from './AfisareUseri';
 import Concediu from './Concediumedical';
 import Coasigurati from './Coasigurati';
-
+import Api from './utils/api';
 
 function IntroducereDate() {
+    const [angajati, setAngajati] = useState([]);
+    const [refreshKey, setRefreshKey] = useState(uniqueId(REFRESH_KEY));
+    
+    const addAngajati = async () => {
+        const response = await Api.get('/angajati');
+        response.status===200 && setAngajati(response.data);
+    };
+
+    console.log('abc', angajati);
+
+    useEffect(() => {
+        addAngajati();
+    }, [refreshKey]);
 
     return (
         <>
@@ -51,10 +66,10 @@ function IntroducereDate() {
                     </ul>
                     <Switch>
                         <Route path="/introduceredate/adaugauser">
-                            <AddUser />
+                            <AddUser setRefreshKey={setRefreshKey} />
                         </Route>
                         <Route path="/introduceredate/afisareuseri">
-                            <AfisareUseri />
+                            <AfisareUseri angajati={angajati} />
                         </Route>
                         <Route path="/introduceredate/concediumedical">
                             <Concediu />

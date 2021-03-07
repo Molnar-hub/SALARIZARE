@@ -3,10 +3,17 @@ import React from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
+import {uniqueId} from 'lodash';
+
+import Api from './utils/api';
 
 import TextError from './TextError';
+import DatePicker from './datePicker/datePicker';
+import {VALIDATION} from './utils/utils';
+import {REFRESH_KEY} from './utils/constants';
 
 import './AdaugaUser.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const initialValues = {
     nume: '',
@@ -14,37 +21,43 @@ const initialValues = {
     cnp: '',
     telefon: '',
     functia: '',
-    dataangajare: '',
+    dataangajare: new Date(),
     deducerepersonala: '',
     salarbaza: '',
     
 };
 
 const validationSchema = Yup.object({
-    nume: Yup.string().required('Camp obligatoriu'),
-    prenume: Yup.string().required('Camp obligatoriu'),
-    cnp: Yup.string().required('Camp obligatoriu'),
-    telefon: Yup.string().required('Camp obligatoriu'),
-    functia: Yup.string().required('Camp obligatoriu'),
-    dataangajare: Yup.string().required('Camp obligatoriu'),
-    deducerepersonala: Yup.string().required('Camp obligatoriu'),
-    salarbaza: Yup.string().required('Camp obligatoriu'),
-    
-
+    nume: Yup.string().required(VALIDATION.field),
+    prenume: Yup.string().required(VALIDATION.field),
+    cnp: Yup.string().required(VALIDATION.field),
+    telefon: Yup.string().required(VALIDATION.field),
+    functia: Yup.string().required(VALIDATION.field),
+    dataangajare: Yup.date().required(VALIDATION.field),
+    deducerepersonala: Yup.string().required(VALIDATION.field),
+    salarbaza: Yup.number()
+                    .typeError(VALIDATION.typeError)
+                    .positive(VALIDATION.positive)
+                    .required(VALIDATION.field)
 });
 
-const onSubmit = values => console.log('Form data', values);
+const AddUser = ({setRefreshKey}) => {
 
-const AddUser = () => {
+    const onSubmit = async (values) => {
+        values.salarbaza=parseFloat(values.salarbaza);
+        await Api.post('/angajati', values);
+        setRefreshKey(uniqueId(REFRESH_KEY));
+    }; 
 
     return (
         <>
             <h2>Adauga Angajat</h2>
+           
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
-            >
+            > 
                 <Form id='form-salariati'>
                     <div className='form-control'>
                         <label htmlFor='nume'>Nume</label>
@@ -69,18 +82,14 @@ const AddUser = () => {
                     </div>
                     <div className='form-control'>
                         <label htmlFor='functia'>Functia</label>
-                        <Field type='text' id='functia' name='fuctia' />
+                        <Field type='text' id='functia' name='functia' />
                         <ErrorMessage name='functia' component={TextError} />
                     </div>
-                    <div className='form-control'>
-                        <label htmlFor='dataangajare'>Data angajare</label>
-                        <Field type='text' id='dataangajare' name='dataangajare' />
-                        <ErrorMessage name='dataangajare' component={TextError} />
-                    </div>
+                    <DatePicker label='Data angajare' name='dataangajare' />
                     <div className='form-control'>
                         <label htmlFor='deducerepersonala'>Deducere personala</label>
-                        <Field type='text' id='deducerepersonal' name='deducerepersonal' />
-                        <ErrorMessage name='deducerepersonal' component={TextError} />
+                        <Field type='text' id='deducerepersonala' name='deducerepersonala' />
+                        <ErrorMessage name='deducerepersonala' component={TextError} />
                     </div>
                     <div className='form-control'>
                         <label htmlFor='salarbaza'>Salar baza</label>
@@ -92,7 +101,7 @@ const AddUser = () => {
                         type='submit'
                         id='submitButton'
                         >
-                            Adauga
+                            Adauga angajat
                         </Button>
                 </Form>
             </Formik>

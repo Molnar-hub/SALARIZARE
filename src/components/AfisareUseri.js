@@ -1,26 +1,8 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import moment from 'moment';
 
-const AfisareUseri = () => {
-
-    const userArray = [{nume: 'Cimpean', 
-                        prenume: 'Cristian', 
-                        cnp: '1751254987541', 
-                        telefon: '0754588972',
-                        functia:'montator',
-                        dataangajare:'02.10.2000',
-                        deducerepersonala:'410',
-                        salarbaza:'2323',
-         },
-                       {nume: 'Raducea', 
-                       prenume: 'Marius', 
-                       cnp: '1235647965124', 
-                       telefon: '0444588972',
-                       functia:'montator',
-                       dataangajare:'02.10.2000',
-                       deducerepersonala:'410',
-                       salarbaza:'2323',
-                    }];
+const AfisareUseri = ({angajati}) => {
 
     return (
         <>
@@ -40,8 +22,8 @@ const AfisareUseri = () => {
                         
                     </tr>
                 </thead>
-                {userArray.map((user, index)=> (
-                    <tbody>
+                {angajati.map((user, index)=> (
+                    <tbody key={index}>
                     <tr>
                         <td>{index+1}</td>
                         <td>{user.nume}</td>
@@ -49,7 +31,7 @@ const AfisareUseri = () => {
                         <td>{user.cnp}</td>
                         <td>{user.telefon}</td>
                         <td>{user.functia}</td>
-                        <td>{user.dataangajare}</td>
+                        <td>{moment(user.dataangajare).format('L')}</td>
                         <td>{user.deducerepersonala}</td>
                         <td>{user.salarbaza}</td>
                     </tr>
